@@ -8,7 +8,7 @@ namespace Forza4Socket.Grid
 {
     internal class Cell
     {
-        public int Row { get; private set; }
-        public int Column { get; private set; }
+        public int Row { get; init; }
+        public int Column { get; init; }
     }
 }

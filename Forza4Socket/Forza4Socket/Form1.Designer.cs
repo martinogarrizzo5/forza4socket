@@ -28,12 +28,59 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.clientBtn = new System.Windows.Forms.Button();
+            this.serverBtn = new System.Windows.Forms.Button();
+            this.sendDataBtn = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // clientBtn
+            // 
+            this.clientBtn.Location = new System.Drawing.Point(125, 136);
+            this.clientBtn.Name = "clientBtn";
+            this.clientBtn.Size = new System.Drawing.Size(94, 29);
+            this.clientBtn.TabIndex = 0;
+            this.clientBtn.Text = "Client";
+            this.clientBtn.UseVisualStyleBackColor = true;
+            this.clientBtn.Click += new System.EventHandler(this.clientBtn_Click);
+            // 
+            // serverBtn
+            // 
+            this.serverBtn.Location = new System.Drawing.Point(251, 136);
+            this.serverBtn.Name = "serverBtn";
+            this.serverBtn.Size = new System.Drawing.Size(94, 29);
+            this.serverBtn.TabIndex = 1;
+            this.serverBtn.Text = "Server";
+            this.serverBtn.UseVisualStyleBackColor = true;
+            this.serverBtn.Click += new System.EventHandler(this.serverBtn_Click);
+            // 
+            // sendDataBtn
+            // 
+            this.sendDataBtn.Location = new System.Drawing.Point(125, 186);
+            this.sendDataBtn.Name = "sendDataBtn";
+            this.sendDataBtn.Size = new System.Drawing.Size(220, 36);
+            this.sendDataBtn.TabIndex = 2;
+            this.sendDataBtn.Text = "Send Data";
+            this.sendDataBtn.UseVisualStyleBackColor = true;
+            this.sendDataBtn.Click += new System.EventHandler(this.sendDataBtn_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.sendDataBtn);
+            this.Controls.Add(this.serverBtn);
+            this.Controls.Add(this.clientBtn);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private Button clientBtn;
+        private Button serverBtn;
+        private Button sendDataBtn;
     }
 }
