@@ -38,6 +38,7 @@ namespace Forza4Socket.Client
                 int knownPort = 11000;
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, knownPort);
                 socket.Connect(remoteEP);
+
             }
             catch (ArgumentException ane)
             {
