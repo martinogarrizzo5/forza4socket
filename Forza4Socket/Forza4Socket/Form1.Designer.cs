@@ -31,6 +31,7 @@
             this.clientBtn = new System.Windows.Forms.Button();
             this.serverBtn = new System.Windows.Forms.Button();
             this.sendDataBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // clientBtn
@@ -63,17 +64,28 @@
             this.sendDataBtn.UseVisualStyleBackColor = true;
             this.sendDataBtn.Click += new System.EventHandler(this.sendDataBtn_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(485, 96);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 20);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.sendDataBtn);
             this.Controls.Add(this.serverBtn);
             this.Controls.Add(this.clientBtn);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -82,5 +94,6 @@
         private Button clientBtn;
         private Button serverBtn;
         private Button sendDataBtn;
+        private Label label1;
     }
 }

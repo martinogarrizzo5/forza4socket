@@ -9,6 +9,8 @@ namespace Forza4Socket.ClientSide
 {
     internal class ClientRequest
     {
-        public Cell SelectedCell { get; init; }
+        public string? Username { get; init; }
+        public Cell? SelectedCell { get; init; }
+        public bool? IsDisconnecting { get; init; }
     }
 }
