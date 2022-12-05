@@ -1,6 +1,8 @@
 using Forza4Socket.ClientSide;
 using Forza4Socket.ServerSide;
-using Forza4Socket.Grid;
+using Forza4Socket.Game;
+using Forza4Socket.Network;
+using System.Net;
 using System.ComponentModel;
 
 namespace Forza4Socket
@@ -13,15 +15,12 @@ namespace Forza4Socket
         public Form1()
         {
             InitializeComponent();
+            client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered));
         }
 
         private void clientBtn_Click(object sender, EventArgs e)
         {
-            if (client == null)
-            {
-                client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData));
-            }
-            client.ConnectToServer();
+            client.ConnectToServer(IPAddress.Loopback);
         }
 
         private void sendDataBtn_Click(object sender, EventArgs e)
@@ -36,17 +35,23 @@ namespace Forza4Socket
             {
                 server = new Server();
             }
-            if (client == null)
-            {
-                client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData));
-            }
             server.Setup();
-            client.ConnectToServer();
+            client.ConnectToServer(IPAddress.Loopback);
         }
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
         {
             label1.Text = "Turn player " + data.TurnPlayer.ToString();
+        }
+
+        private void OnNetworkDiscovering()
+        {
+            Console.WriteLine("discovering");
+        }
+
+        private void OnDeviceDiscovered(IPAddress address)
+        {
+            Console.WriteLine("Network Discovery: Available Host: " + address.ToString());
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -61,6 +66,11 @@ namespace Forza4Socket
             {
                 server.CloseAllConnections();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            client.SearchAvailableHosts();
         }
     }
 }

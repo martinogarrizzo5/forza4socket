@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using Forza4Socket.ServerSide;
+using Forza4Socket.Network;
 
 namespace Forza4Socket.ClientSide
 {
@@ -11,10 +12,12 @@ namespace Forza4Socket.ClientSide
         Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         byte[] Buffer = new byte[1024];
         Action<ServerResponse> ActionOnDataReceived;
+        Action<IPAddress> ActionOnDeviceDiscovered;
 
-        public Client(Action<ServerResponse> onDataReceived)
+        public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered)
         {
             ActionOnDataReceived = onDataReceived;
+            ActionOnDeviceDiscovered = onDeviceDiscovered;
         }
 
         public bool IsConnected()
@@ -22,11 +25,11 @@ namespace Forza4Socket.ClientSide
             return Socket.Connected;
         }
 
-        public void ConnectToServer()
+        public void ConnectToServer(IPAddress ipAddress)
         {
             try
             {
-                Socket.BeginConnect(new IPEndPoint(IPAddress.Loopback, Server.KNOWN_PORT),
+                Socket.BeginConnect(new IPEndPoint(ipAddress, Server.KNOWN_PORT),
                     new AsyncCallback(OnConnectionAccepted), null);
             }
             catch (Exception ex)
@@ -41,6 +44,7 @@ namespace Forza4Socket.ClientSide
             {
                 if (Socket.Connected)
                 {
+                    // a zero bytes request will be sent when closing the socket
                     Socket.Shutdown(SocketShutdown.Both);
                     Socket.Close();
                 }
@@ -148,6 +152,12 @@ namespace Forza4Socket.ClientSide
         {
             Console.WriteLine("Client: Server disconnected");
             Socket.Close();
+        }
+
+        public void SearchAvailableHosts()
+        {
+            NetworkDiscovery discoveryService = new NetworkDiscovery(ActionOnDeviceDiscovered);
+            discoveryService.DiscoverLocalNetworkHosts(Server.KNOWN_PORT);
         }
     }
 }

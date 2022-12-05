@@ -118,6 +118,7 @@ namespace Forza4Socket.ServerSide
             }
             catch (Exception ex)
             {
+                // TODO: NECESSARY TO REMOVE SOCKET FROM LIST?
                 Console.WriteLine(ex.ToString());
             }
         }
@@ -170,6 +171,7 @@ namespace Forza4Socket.ServerSide
                 {
                     if (socket.Connected)
                     {
+                        // a zero bytes response will be sent to all clients when closing the socket
                         socket.Shutdown(SocketShutdown.Both);
                         socket.Close();
                     }

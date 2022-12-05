@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forza4Socket.Grid
+namespace Forza4Socket.Game
 {
     internal class Cell
     {
