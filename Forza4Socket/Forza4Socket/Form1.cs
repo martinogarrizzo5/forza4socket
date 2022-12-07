@@ -72,5 +72,10 @@ namespace Forza4Socket
         {
             client.SearchAvailableHosts();
         }
+
+        private void btn_Client_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

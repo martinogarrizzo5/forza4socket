@@ -8,7 +8,15 @@ namespace Forza4Socket.Game
 {
     internal class Cell
     {
-        public int Row { get; init; }
-        public int Column { get; init; }
+        public int Row { get; private set; }
+        public int Column { get; private set; }
+        public int GetRow()
+        {
+            return Row;
+        }
+        public int GetColumn()
+        {
+            return Column;
+        }
     }
 }
