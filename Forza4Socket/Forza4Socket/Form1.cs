@@ -6,5 +6,10 @@ namespace Forza4Socket
         {
             InitializeComponent();
         }
+
+        private void btn_Client_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

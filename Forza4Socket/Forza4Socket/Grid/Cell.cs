@@ -10,5 +10,13 @@ namespace Forza4Socket.Grid
     {
         public int Row { get; private set; }
         public int Column { get; private set; }
+        public int GetRow()
+        {
+            return Row;
+        }
+        public int GetColumn()
+        {
+            return Column;
+        }
     }
 }

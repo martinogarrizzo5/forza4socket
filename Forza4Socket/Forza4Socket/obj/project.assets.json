@@ -8,19 +8,19 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Nicola\\.nuget\\packages\\": {}
+    "C:\\Users\\Utente\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
+      "projectUniqueName": "C:\\Users\\Utente\\Documents\\GitHub\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
       "projectName": "Forza4Socket",
-      "projectPath": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
-      "packagesPath": "C:\\Users\\Nicola\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\obj\\",
+      "projectPath": "C:\\Users\\Utente\\Documents\\GitHub\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
+      "packagesPath": "C:\\Users\\Utente\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Utente\\Documents\\GitHub\\forza4socket\\Forza4Socket\\Forza4Socket\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Nicola\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Utente\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
