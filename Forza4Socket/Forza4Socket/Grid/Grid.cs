@@ -8,5 +8,6 @@ namespace Forza4Socket.Grid
 {
     internal class Grid
     {
+
     }
 }
