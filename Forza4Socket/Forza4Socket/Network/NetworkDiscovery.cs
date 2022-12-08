@@ -9,13 +9,15 @@ namespace Forza4Socket.Network
     internal class NetworkDiscovery
     {
         Action<IPAddress> ActionOnNewHostAvailable;
+        Action<List<IPAddress>> ActionOnDiscoveryFinished;
 
         System.Timers.Timer timer = new System.Timers.Timer(4000);
         List<SocketAsyncEventArgs> list = new List<SocketAsyncEventArgs>();
 
-        public NetworkDiscovery(Action<IPAddress> onNewHostAvailable)
+        public NetworkDiscovery(Action<IPAddress> onNewHostAvailable, Action<List<IPAddress>> OnDiscoveryFinished)
         {
             ActionOnNewHostAvailable = onNewHostAvailable;
+            ActionOnDiscoveryFinished = OnDiscoveryFinished;
             timer.Elapsed += OnTimerExpiration;
         }
 
@@ -59,14 +61,21 @@ namespace Forza4Socket.Network
 
         private void OnTimerExpiration(object sender, EventArgs e)
         {
+            List<IPAddress> discoveredHosts = new List<IPAddress>();
+
             timer.Stop();
             foreach (var s in list)
             {
                 //disposing all sockets that's pending or connected using the reference to the socket saved in UserToken
                 Socket socket = (Socket)s.UserToken!;
+                IPAddress ipAddress = ((IPEndPoint)s.RemoteEndPoint!).Address;
+                if (socket.Connected) discoveredHosts.Add(ipAddress);
+
                 socket.Close();
                 socket.Dispose();
             }
+
+            ActionOnDiscoveryFinished(discoveredHosts);
         }
     }
 }

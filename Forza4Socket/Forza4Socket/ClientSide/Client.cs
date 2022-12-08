@@ -14,12 +14,14 @@ namespace Forza4Socket.ClientSide
         Action<ServerResponse> ActionOnDataReceived;
         Action<IPAddress> ActionOnDeviceDiscovered;
         Action ActionOnServerConnectionAccepted;
+        Action<List<IPAddress>> ActionOnDiscoverFinished;
 
-        public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted)
+        public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted, Action<List<IPAddress>> onDiscoverFinished)
         {
             ActionOnDataReceived = onDataReceived;
             ActionOnDeviceDiscovered = onDeviceDiscovered;
             ActionOnServerConnectionAccepted = onConnectionAccepted;
+            ActionOnDiscoverFinished = onDiscoverFinished;
         }
 
         public bool IsConnected()
@@ -160,7 +162,7 @@ namespace Forza4Socket.ClientSide
 
         public void SearchAvailableHosts()
         {
-            NetworkDiscovery discoveryService = new NetworkDiscovery(ActionOnDeviceDiscovered);
+            NetworkDiscovery discoveryService = new NetworkDiscovery(ActionOnDeviceDiscovered, ActionOnDiscoverFinished);
             discoveryService.DiscoverLocalNetworkHosts(Server.KNOWN_PORT);
         }
     }

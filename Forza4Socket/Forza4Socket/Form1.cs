@@ -14,7 +14,7 @@ namespace Forza4Socket
 
         public Form1()
         {
-            client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered), new Action(onConnectionAccepted));
+            client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered), new Action(onConnectionAccepted), new Action<List<IPAddress>>(OnDiscoveredFinished));
             InitializeComponent();
         }
 
@@ -40,7 +40,17 @@ namespace Forza4Socket
         {
             if (data.GameStarted == true)
             {
-
+                if (data.Player != null && data.TurnPlayer != null && data.TurnPlayer != -1)
+                {
+                    if (data.TurnPlayer == data.Player.Id)
+                    {
+                        lblTurnPlayer.Text = $"è il tuo turno {data.Player.Username}";
+                    }
+                    else
+                    {
+                        lblTurnPlayer.Text = "In attesa della mossa dell'altro giocatore";
+                    }
+                }
             }
             else
             {
@@ -68,8 +78,18 @@ namespace Forza4Socket
 
         private void OnDeviceDiscovered(IPAddress address)
         {
-            Console.WriteLine("Network Discovery: Available Host: " + address.ToString());
-            lstHosts.Items.Add(address);
+            /* Console.WriteLine("Network Discovery: Available Host: " + address.ToString());
+            lstHosts.Items.Add(address); */
+        }
+
+        private void OnDiscoveredFinished(List<IPAddress> addresses)
+        {
+            lstHosts.Items.Clear();
+            foreach (IPAddress address in addresses)
+            {
+                lstHosts.Items.Add(address);
+            }
+            searchingLbl.Text = "";
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -86,8 +106,9 @@ namespace Forza4Socket
             }
         }
 
-        private void discoverDevicesBtn(object sender, EventArgs e)
+        private void on_DiscoverButtonClick(object sender, EventArgs e)
         {
+            searchingLbl.Text = "Searching...";
             lstHosts.Items.Clear();
             client.SearchAvailableHosts();
         }

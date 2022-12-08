@@ -17,6 +17,8 @@ namespace Forza4Socket.ServerSide
         private List<Player> Players;
         private List<Player> ActivePlayers;
         private int TurnPlayerId = -1;
+        private int WinningPlayerId = -1;
+        private bool InvalidCellClicked = false;
         const int REQUIRED_PLAYERS = 2;
 
         public static int KNOWN_PORT = 11000;
@@ -88,10 +90,12 @@ namespace Forza4Socket.ServerSide
                 ClientRequest? req = GetDataFromBytes(dataBuffer);
                 if (req != null)
                 {
-                    // tell all clients the state of the game
+                    HandleRequest(req, socket);
+
+                    // tell all clients the new state of the game
                     foreach (Socket client in ClientSockets)
                     {
-                        ServerResponse res = HandleRequest(req, socket, client);
+                        ServerResponse res = GenerateResponse(req, socket, client);
                         SendDataToClient(client, res);
                     }
                 }
@@ -187,13 +191,10 @@ namespace Forza4Socket.ServerSide
             }
         }
 
-        private ServerResponse HandleRequest(ClientRequest req, Socket senderClient, Socket receiverClient)
+        private void HandleRequest(ClientRequest req, Socket requestSender)
         {
-            int senderId = ClientSockets.FindIndex((s) => s == senderClient);
+            int senderId = ClientSockets.FindIndex((s) => s == requestSender);
             int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
-
-            int receiverId = ClientSockets.FindIndex((s) => s == receiverClient);
-            int receiverPlayerIndex = Players.FindIndex((p) => p.Id == receiverId);
 
             if (req.CanPlayGame == true)
             {
@@ -208,33 +209,52 @@ namespace Forza4Socket.ServerSide
                     };
 
                     Players.Add(newPlayer);
-                    if (receiverClient == senderClient) receiverPlayerIndex = Players.Count - 1;
-
                     if (ActivePlayers.Count < REQUIRED_PLAYERS) ActivePlayers.Add(newPlayer);
+
+                    if (ActivePlayers.Count == REQUIRED_PLAYERS)
+                    {
+                        TurnPlayerId = ActivePlayers[0].Id;
+                    }
                 }
             }
 
-            bool isValidCell = false;
             if (req.SelectedCell != null)
             {
-                isValidCell = Grid.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
-                ChangeTurnPlayer();
+                bool isValidCell = Grid.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
+                if (isValidCell)
+                {
+                    ChangeTurnPlayer();
+                    InvalidCellClicked = false;
+                }
+                else
+                {
+                    InvalidCellClicked = true;
+                }
             }
 
-            int winningPlayerId = -1;
             if (req.Disconnection == true)
             {
-                HandleDisconnectedClient(senderClient);
+                HandleDisconnectedClient(requestSender);
             }
 
             if (ActivePlayers.Count == 1)
             {
-                winningPlayerId = ActivePlayers[0].Id;
+                WinningPlayerId = ActivePlayers[0].Id; // server is the winner if the other player disconnects
             }
             else if (ActivePlayers.Count == REQUIRED_PLAYERS)
             {
-                winningPlayerId = ActivePlayers.FindIndex((p) => Grid.CheckVictory(p.Id));
+                WinningPlayerId = ActivePlayers.FindIndex((p) => Grid.CheckVictory(p.Id));
             }
+
+        }
+
+        private ServerResponse GenerateResponse(ClientRequest req, Socket requestSender, Socket receiverClient)
+        {
+            int senderId = ClientSockets.FindIndex((s) => s == requestSender);
+            int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
+
+            int receiverId = ClientSockets.FindIndex((s) => s == receiverClient);
+            int receiverPlayerIndex = Players.FindIndex((p) => p.Id == receiverId);
 
             ServerResponse res = new ServerResponse()
             {
@@ -242,10 +262,11 @@ namespace Forza4Socket.ServerSide
                 Players = Players,
                 GameStarted = Players.Count == REQUIRED_PLAYERS,
                 UpdatedGrid = Grid,
-                WinningPlayer = winningPlayerId > -1 ? winningPlayerId : null,
+                WinningPlayer = WinningPlayerId > -1 ? WinningPlayerId : null,
                 Player = receiverPlayerIndex > -1 ? Players[receiverPlayerIndex] : null,
-                IsGameOver = winningPlayerId > -1,
-                IsCellSelectable = winningPlayerId > -1,
+                IsGameOver = WinningPlayerId > -1,
+                IsCellSelectedInvalid = InvalidCellClicked,
+                SelectedCell = req.SelectedCell,
             };
 
             return res;

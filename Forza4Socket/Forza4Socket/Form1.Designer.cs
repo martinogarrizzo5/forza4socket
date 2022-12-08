@@ -47,6 +47,7 @@
             this.lbl_Vincitore = new System.Windows.Forms.Label();
             this.gameStatusLbl = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.searchingLbl = new System.Windows.Forms.Label();
             this.grb_RegoleEAvvio.SuspendLayout();
             this.grb_Forza4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -107,6 +108,7 @@
             // 
             // grb_RegoleEAvvio
             // 
+            this.grb_RegoleEAvvio.Controls.Add(this.searchingLbl);
             this.grb_RegoleEAvvio.Controls.Add(this.label35);
             this.grb_RegoleEAvvio.Controls.Add(this.usernameTextBox);
             this.grb_RegoleEAvvio.Controls.Add(this.label2);
@@ -170,7 +172,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Discover";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.discoverDevicesBtn);
+            this.button1.Click += new System.EventHandler(this.on_DiscoverButtonClick);
             // 
             // lstHosts
             // 
@@ -243,6 +245,14 @@
             this.dataGridView1.Size = new System.Drawing.Size(557, 556);
             this.dataGridView1.TabIndex = 1;
             // 
+            // searchingLbl
+            // 
+            this.searchingLbl.AutoSize = true;
+            this.searchingLbl.Location = new System.Drawing.Point(585, 416);
+            this.searchingLbl.Name = "searchingLbl";
+            this.searchingLbl.Size = new System.Drawing.Size(0, 20);
+            this.searchingLbl.TabIndex = 11;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -282,5 +292,6 @@
         private Label lblTurnPlayer;
         private Label label35;
         private TextBox usernameTextBox;
+        private Label searchingLbl;
     }
 }

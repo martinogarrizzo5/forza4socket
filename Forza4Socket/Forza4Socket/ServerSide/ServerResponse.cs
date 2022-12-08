@@ -11,7 +11,7 @@ namespace Forza4Socket.ServerSide
     internal class ServerResponse
     {
         public Grid? UpdatedGrid { get; init; }
-        public bool? IsCellSelectable { get; init; }
+        public bool? IsCellSelectedInvalid { get; init; }
         public Cell? SelectedCell { get; init; }
         public bool? IsGameOver { get; init; }
         public int? WinningPlayer { get; init; }
