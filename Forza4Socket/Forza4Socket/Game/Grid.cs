@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Forza4Socket.Game
 {
+    [Serializable]
     internal class Grid
     {
         public int Columns { get; private set; }
         public int Rows { get; private set; }
         public int RequiredPawns { get; private set; }
-        public int[,] GameGrid { get; private set; }
+        public List<List<int>> GameGrid { get; private set; }
 
         public Grid()
         {
@@ -20,15 +21,24 @@ namespace Forza4Socket.Game
             Rows = 6;
             RequiredPawns = 4;
 
-            GameGrid = new int[Rows, Columns];
+            GameGrid = new List<List<int>>();
             // insert default value 0
             for (int i = 0; i < Rows; i++)
             {
+                GameGrid.Add(new List<int>());
                 for (int j = 0; j < Columns; j++)
                 {
-                    GameGrid[i, j] = -1;
+                    GameGrid[i].Add(-1);
                 }
             }
+        }
+        public bool CheckVictory(int pawn)
+        {
+            bool anyColumnValid = CheckColumns(pawn);
+            bool anyRowValid = CheckRows(pawn);
+            bool anyDiagonalValid = CheckDiagonals(pawn);
+
+            return anyColumnValid || anyRowValid || anyDiagonalValid;
         }
 
         public bool CheckRows(int pawn)
@@ -39,7 +49,7 @@ namespace Forza4Socket.Game
                 int end = 0;
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (GameGrid[i, j] == pawn)
+                    if (GameGrid[i][j] == pawn)
                     {
                         end++;
                     }
@@ -66,7 +76,7 @@ namespace Forza4Socket.Game
                 int end = 0;
                 for (int j = 0; j < Rows; j++)
                 {
-                    if (GameGrid[j, i] == pawn)
+                    if (GameGrid[j][i] == pawn)
                     {
                         end++;
                     }
@@ -96,7 +106,7 @@ namespace Forza4Socket.Game
 
                 while (i < Rows && j < Columns)
                 {
-                    if (GameGrid[i, j] == p)
+                    if (GameGrid[i][j] == p)
                     {
                         end++;
                     }
@@ -119,7 +129,7 @@ namespace Forza4Socket.Game
             return false;
         }
 
-        public void InsertPawn(int pawn, int row, int column)
+        public bool InsertPawn(int pawn, int row, int column)
         {
             int i = row;
             bool isPositionFound = false;
@@ -127,7 +137,7 @@ namespace Forza4Socket.Game
 
             while (i < Rows && !isPositionFound)
             {
-                if (GameGrid[i, column] == -1)
+                if (GameGrid[i][column] == -1)
                 {
                     isPositionFound = true;
                 }
@@ -137,7 +147,24 @@ namespace Forza4Socket.Game
                 }
             }
 
-            GameGrid[position, column] = pawn;
+            if (position != -1)
+            {
+                GameGrid[position][column] = pawn;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ClearGrid()
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    GameGrid[i][j] = -1;
+                }
+            }
         }
     }
 }

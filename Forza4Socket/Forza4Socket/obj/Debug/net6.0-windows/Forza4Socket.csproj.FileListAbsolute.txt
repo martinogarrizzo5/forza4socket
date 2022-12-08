@@ -16,3 +16,21 @@ C:\Users\Nicola\Desktop\CLASSE QUARTA\Sistemi e Reti\Forza 4\forza4socket\Forza4
 C:\Users\Nicola\Desktop\CLASSE QUARTA\Sistemi e Reti\Forza 4\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.genruntimeconfig.cache
 C:\Users\Nicola\Desktop\CLASSE QUARTA\Sistemi e Reti\Forza 4\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\ref\Forza4Socket.dll
 C:\Users\Nicola\Desktop\CLASSE QUARTA\Sistemi e Reti\Forza 4\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Frm_Forza4.resources
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.AssemblyReference.cache
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Form1.resources
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Properties.Resources.resources
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.GenerateResource.cache
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.AssemblyInfoInputs.cache
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.AssemblyInfo.cs
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.CoreCompileInputs.cache
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.dll
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\ref\Forza4Socket.dll
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.pdb
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.exe
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.deps.json
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.runtimeconfig.json
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.dll
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\ref\Forza4Socket.dll
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.pdb
+C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.genruntimeconfig.cache

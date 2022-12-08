@@ -14,44 +14,62 @@ namespace Forza4Socket
 
         public Form1()
         {
+            client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered), new Action(onConnectionAccepted));
             InitializeComponent();
-            client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered));
         }
 
         private void clientBtn_Click(object sender, EventArgs e)
         {
-            client.ConnectToServer(IPAddress.Loopback);
-        }
-
-        private void sendDataBtn_Click(object sender, EventArgs e)
-        {
-            Cell selectedCell = new Cell() { Column = 4, Row = 3 };
-            client.SendDataToServer(new ClientRequest() { SelectedCell = selectedCell });
+            IPAddress ip = (IPAddress?)lstHosts.SelectedItem;
+            if (ip != null)
+            {
+                client.ConnectToServer(ip);
+            }
         }
 
         private void serverBtn_Click(object sender, EventArgs e)
         {
-            if (server == null)
-            {
-                server = new Server();
-            }
+            server = new Server();
             server.Setup();
             client.ConnectToServer(IPAddress.Loopback);
+
+            lblTurnPlayer.Text = "In attesa di un giocatore...";
         }
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
         {
-            label1.Text = "Turn player " + data.TurnPlayer.ToString();
+            if (data.GameStarted == true)
+            {
+
+            }
+            else
+            {
+                if (server != null)
+                {
+                    lblTurnPlayer.Text = "In attesa di un giocatore...";
+                }
+                else
+                {
+                    lblTurnPlayer.Text = "In attesa dell'host...";
+                }
+            }
         }
 
-        private void OnNetworkDiscovering()
+        private void onConnectionAccepted()
         {
-            Console.WriteLine("discovering");
+            ClientRequest userData = new ClientRequest()
+            {
+                Username = usernameTextBox.Text,
+                CanPlayGame = true,
+            };
+
+            client.SendDataToServer(userData);
         }
 
         private void OnDeviceDiscovered(IPAddress address)
         {
             Console.WriteLine("Network Discovery: Available Host: " + address.ToString());
+            lstHosts.Items.Add(address);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -68,19 +86,10 @@ namespace Forza4Socket
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void discoverDevicesBtn(object sender, EventArgs e)
         {
+            lstHosts.Items.Clear();
             client.SearchAvailableHosts();
-        }
-
-        private void btn_Client_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

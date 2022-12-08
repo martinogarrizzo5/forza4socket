@@ -7,6 +7,7 @@ using Forza4Socket.Game;
 
 namespace Forza4Socket.ClientSide
 {
+    [Serializable]
     internal class ClientRequest
     {
         public string? Username { get; init; }

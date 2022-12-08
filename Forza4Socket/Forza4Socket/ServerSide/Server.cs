@@ -16,8 +16,8 @@ namespace Forza4Socket.ServerSide
         private Grid Grid;
         private List<Player> Players;
         private List<Player> ActivePlayers;
-        private int TurnPlayer = -1;
-        const int MAX_PLAYERS = 2;
+        private int TurnPlayerId = -1;
+        const int REQUIRED_PLAYERS = 2;
 
         public static int KNOWN_PORT = 11000;
 
@@ -71,10 +71,9 @@ namespace Forza4Socket.ServerSide
 
         private void OnDataReceived(IAsyncResult asyncResult)
         {
+            Socket socket = (Socket)asyncResult.AsyncState!;
             try
             {
-                Socket socket = (Socket)asyncResult.AsyncState!;
-
                 int receivedBytes = socket.EndReceive(asyncResult);
                 byte[] dataBuffer = new byte[receivedBytes];
                 Array.Copy(Buffer, dataBuffer, receivedBytes);
@@ -89,11 +88,10 @@ namespace Forza4Socket.ServerSide
                 ClientRequest? req = GetDataFromBytes(dataBuffer);
                 if (req != null)
                 {
-                    ServerResponse res = HandleRequest(req, socket);
-
                     // tell all clients the state of the game
                     foreach (Socket client in ClientSockets)
                     {
+                        ServerResponse res = HandleRequest(req, socket, client);
                         SendDataToClient(client, res);
                     }
                 }
@@ -103,6 +101,10 @@ namespace Forza4Socket.ServerSide
             }
             catch (Exception ex)
             {
+                if (ex is SocketException)
+                {
+                    HandleDisconnectedClient(socket);
+                }
                 Console.WriteLine(ex.ToString());
             }
         }
@@ -136,8 +138,10 @@ namespace Forza4Socket.ServerSide
             {
                 Console.WriteLine(ex.ToString());
 
-                // remove socket if unavailable to receive data
-                ClientSockets.Remove(socket);
+                if (ex is SocketException)
+                {
+                    HandleDisconnectedClient(socket);
+                }
             }
         }
 
@@ -153,7 +157,10 @@ namespace Forza4Socket.ServerSide
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                ClientSockets.Remove(socket);
+                if (ex is SocketException)
+                {
+                    HandleDisconnectedClient(socket);
+                }
             }
         }
 
@@ -164,8 +171,12 @@ namespace Forza4Socket.ServerSide
                 Console.WriteLine("Server: A client disconnected");
 
                 int id = ClientSockets.FindIndex((s) => socket == s);
-                ClientSockets.RemoveAt(id);
-                Players.RemoveAll((p) => p.Id == id);
+                if (id != -1)
+                {
+                    ClientSockets.RemoveAt(id);
+                    Players.RemoveAll((p) => p.Id == id);
+                    ActivePlayers.RemoveAll((p) => p.Id == id);
+                }
 
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
@@ -176,47 +187,82 @@ namespace Forza4Socket.ServerSide
             }
         }
 
-        private ServerResponse HandleRequest(ClientRequest req, Socket socket)
+        private ServerResponse HandleRequest(ClientRequest req, Socket senderClient, Socket receiverClient)
         {
-            int id = ClientSockets.FindIndex((s) => s == socket);
-            int player = Players.FindIndex((player) => player.Id == id);
+            int senderId = ClientSockets.FindIndex((s) => s == senderClient);
+            int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
+
+            int receiverId = ClientSockets.FindIndex((s) => s == receiverClient);
+            int receiverPlayerIndex = Players.FindIndex((p) => p.Id == receiverId);
 
             if (req.CanPlayGame == true)
             {
                 // create new player only if it's not already in list and if there's a valid socket associated
-                if (id != -1 && player == -1)
+                if (senderId != -1 && senderPlayerIndex == -1)
                 {
                     Player newPlayer = new Player()
                     {
-                        Id = id,
-                        GameMode = ActivePlayers.Count < MAX_PLAYERS ? GameMode.Player : GameMode.Spectator,
-                        Username = req.Username != null ? req.Username : $"Guest-{id}"
+                        Id = senderId,
+                        GameMode = ActivePlayers.Count < REQUIRED_PLAYERS ? GameMode.Player : GameMode.Spectator,
+                        Username = req.Username != null ? req.Username : $"Guest-{senderId}"
                     };
 
                     Players.Add(newPlayer);
-                    if (ActivePlayers.Count < MAX_PLAYERS) ActivePlayers.Add(newPlayer);
+                    if (receiverClient == senderClient) receiverPlayerIndex = Players.Count - 1;
+
+                    if (ActivePlayers.Count < REQUIRED_PLAYERS) ActivePlayers.Add(newPlayer);
                 }
             }
 
+            bool isValidCell = false;
             if (req.SelectedCell != null)
             {
-
+                isValidCell = Grid.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
+                ChangeTurnPlayer();
             }
 
+            int winningPlayerId = -1;
             if (req.Disconnection == true)
             {
-                ClientSockets.RemoveAt(id);
-                Players.RemoveAll((player) => player.Id == id);
-                ActivePlayers.RemoveAll((player) => player.Id == id);
+                HandleDisconnectedClient(senderClient);
+            }
+
+            if (ActivePlayers.Count == 1)
+            {
+                winningPlayerId = ActivePlayers[0].Id;
+            }
+            else if (ActivePlayers.Count == REQUIRED_PLAYERS)
+            {
+                winningPlayerId = ActivePlayers.FindIndex((p) => Grid.CheckVictory(p.Id));
             }
 
             ServerResponse res = new ServerResponse()
             {
-                TurnPlayer = 1,
+                TurnPlayer = TurnPlayerId,
                 Players = Players,
+                GameStarted = Players.Count == REQUIRED_PLAYERS,
+                UpdatedGrid = Grid,
+                WinningPlayer = winningPlayerId > -1 ? winningPlayerId : null,
+                Player = receiverPlayerIndex > -1 ? Players[receiverPlayerIndex] : null,
+                IsGameOver = winningPlayerId > -1,
+                IsCellSelectable = winningPlayerId > -1,
             };
 
             return res;
+        }
+
+        public void ChangeTurnPlayer()
+        {
+            if (ActivePlayers.Count != REQUIRED_PLAYERS) return;
+
+            if (ActivePlayers[0].Id == TurnPlayerId)
+            {
+                TurnPlayerId = ActivePlayers[1].Id;
+            }
+            else
+            {
+                TurnPlayerId = ActivePlayers[0].Id;
+            }
         }
 
         public void CloseAllConnections()
@@ -234,6 +280,8 @@ namespace Forza4Socket.ServerSide
                 }
                 ClientSockets.Clear();
                 Players.Clear();
+                ActivePlayers.Clear();
+                Grid.ClearGrid();
             }
             catch (Exception ex)
             {

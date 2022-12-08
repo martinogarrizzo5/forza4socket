@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Forza4Socket.Game
 {
+    [Serializable]
     internal class Cell
     {
         public int Row { get; init; }

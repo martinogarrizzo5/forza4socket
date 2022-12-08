@@ -13,11 +13,13 @@ namespace Forza4Socket.ClientSide
         byte[] Buffer = new byte[1024];
         Action<ServerResponse> ActionOnDataReceived;
         Action<IPAddress> ActionOnDeviceDiscovered;
+        Action ActionOnServerConnectionAccepted;
 
-        public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered)
+        public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted)
         {
             ActionOnDataReceived = onDataReceived;
             ActionOnDeviceDiscovered = onDeviceDiscovered;
+            ActionOnServerConnectionAccepted = onConnectionAccepted;
         }
 
         public bool IsConnected()
@@ -80,7 +82,7 @@ namespace Forza4Socket.ClientSide
                 Socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None,
                     new AsyncCallback(OnDataReceived), Socket);
 
-                SendDataToServer(new ClientRequest() { CanPlayGame = true, Username = "Ciao" });
+                ActionOnServerConnectionAccepted();
             }
             catch (Exception ex)
             {
