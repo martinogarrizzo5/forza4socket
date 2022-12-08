@@ -9,112 +9,135 @@ namespace Forza4Socket.Game
 {
     internal class Grid
     {
-        Cell c = new Cell();
-        int[,] griglia = new int[6,7];
+        public int Columns { get; private set; }
+        public int Rows { get; private set; }
+        public int RequiredPawns { get; private set; }
+        public int[,] GameGrid { get; private set; }
+
         public Grid()
         {
-            for(int i = 0; i<6;i++)
-            {
-                for(int j = 0; j<7;j++)
-                {
-                    griglia[i,j] = 0;
-                }
-            }
-        }
-        public bool RowsControl(int p, int row)
-        {
-            for(int i = 0; i<6;i++)
-            {
-                int partenza = 0;
-                int fine = 0;
-                for (int j = 0; j < 7; j++)
-                {
-                    if (griglia[row, i] == p)
-                    {
-                        fine++;
-                    }
-                    else
-                    {
-                        partenza = i + 1;
-                        fine = partenza;
-                    }
-                    if (fine - partenza == 4)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        public bool ColumnsControl(int p, int column)
-        {
-            for (int i = 0; i < 7; i++)
-            {
-                int partenza = 0;
-                int fine = 0;
-                for (int j = 0; j < 6; j++)
-                {
-                    if (griglia[i,column] == p)
-                    {
-                        fine++;
-                    }
-                    else
-                    {
-                        partenza = i + 1;
-                        fine = partenza;
-                    }
-                    if (fine - partenza == 4)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        public bool DiagonalControl(int p)
-        {
-            int partenza = 0;
-            int fine = 0;
-            int i = 0;
-            for (int k = 0; k < 7; k++)
-            {
-                for (int j = k; j < 6; j++)
-                {
-                    if (griglia[i, j] == p)
-                    {
-                        fine++;
-                    }
-                    else
-                    {
-                        partenza = j + 1;
-                        fine = partenza;
-                    }
-                    i++;
+            Columns = 7;
+            Rows = 6;
+            RequiredPawns = 4;
 
-                    if (fine - partenza == 4)
+            GameGrid = new int[Rows, Columns];
+            // insert default value 0
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    GameGrid[i, j] = -1;
+                }
+            }
+        }
+
+        public bool CheckRows(int pawn)
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                int start = 0;
+                int end = 0;
+                for (int j = 0; j < Columns; j++)
+                {
+                    if (GameGrid[i, j] == pawn)
+                    {
+                        end++;
+                    }
+                    else
+                    {
+                        start = j + 1;
+                        end = start;
+                    }
+                    if (end - start == RequiredPawns)
                     {
                         return true;
                     }
                 }
-              
             }
+
             return false;
         }
-        public void InsertPawn(int row, int column)
+
+        public bool CheckColumns(int pawn)
+        {
+            for (int i = 0; i < Columns; i++)
+            {
+                int start = 0;
+                int end = 0;
+                for (int j = 0; j < Rows; j++)
+                {
+                    if (GameGrid[j, i] == pawn)
+                    {
+                        end++;
+                    }
+                    else
+                    {
+                        start = j + 1;
+                        end = start;
+                    }
+                    if (end - start == RequiredPawns)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool CheckDiagonals(int p)
+        {
+            for (int k = 0; k < Columns; k++)
+            {
+                int start = 0;
+                int end = 0;
+                int i = 0;
+                int j = k;
+
+                while (i < Rows && j < Columns)
+                {
+                    if (GameGrid[i, j] == p)
+                    {
+                        end++;
+                    }
+                    else
+                    {
+                        start = j + 1;
+                        end = start;
+                    }
+
+                    if (end - start == RequiredPawns)
+                    {
+                        return true;
+                    }
+
+                    i++;
+                    j++;
+                }
+            }
+
+            return false;
+        }
+
+        public void InsertPawn(int pawn, int row, int column)
         {
             int i = row;
-            int j = column;
             bool isPositionFound = false;
             int position = -1;
-            while (j < griglia.Length && !isPositionFound)
+
+            while (i < Rows && !isPositionFound)
             {
-               if(griglia[i, j] != 0)
-               {
+                if (GameGrid[i, column] == -1)
+                {
                     isPositionFound = true;
-                    position = j - 1;
-               }
-               j++;
+                }
+                else
+                {
+                    position = i;
+                }
             }
+
+            GameGrid[position, column] = pawn;
         }
     }
 }

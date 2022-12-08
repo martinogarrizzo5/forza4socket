@@ -79,6 +79,8 @@ namespace Forza4Socket.ClientSide
                 // listen for possible incoming data after connection
                 Socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None,
                     new AsyncCallback(OnDataReceived), Socket);
+
+                SendDataToServer(new ClientRequest() { CanPlayGame = true, Username = "Ciao" });
             }
             catch (Exception ex)
             {

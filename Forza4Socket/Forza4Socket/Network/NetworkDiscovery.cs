@@ -38,7 +38,14 @@ namespace Forza4Socket.Network
             e.Completed += new EventHandler<SocketAsyncEventArgs>(OnHostConnected);
             list.Add(e); // Add to a list so we dispose all the sockets when the timer ticks.
 
-            s.ConnectAsync(e);
+            try
+            {
+                s.ConnectAsync(e);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         private void OnHostConnected(object sender, SocketAsyncEventArgs e)

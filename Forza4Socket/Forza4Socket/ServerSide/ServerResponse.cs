@@ -15,6 +15,6 @@ namespace Forza4Socket.ServerSide
         public bool? IsGameOver { get; init; }
         public int? WinningPlayer { get; init; }
         public int? TurnPlayer { get; init; }
-
+        public List<Player> Players { get; init; }
     }
 }

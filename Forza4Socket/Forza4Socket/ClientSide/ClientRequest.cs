@@ -11,9 +11,9 @@ namespace Forza4Socket.ClientSide
     {
         public string? Username { get; init; }
         public Cell? SelectedCell { get; init; }
-        public bool? IsDisconnecting { get; init; }
+        public bool? Disconnection { get; init; }
 
-        // TODO: only clients that specify in the request that they want to play can be seen as players by the server
-        public bool CanPlayGame { get; init; }
+        // only clients that specify in the request that they want to play can be seen as players by the server
+        public bool? CanPlayGame { get; init; }
     }
 }

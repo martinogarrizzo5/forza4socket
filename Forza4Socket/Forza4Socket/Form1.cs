@@ -25,7 +25,7 @@ namespace Forza4Socket
 
         private void sendDataBtn_Click(object sender, EventArgs e)
         {
-            Cell selectedCell = new Cell() { Row = 4, Column = 3 };
+            Cell selectedCell = new Cell() { Column = 4, Row = 3 };
             client.SendDataToServer(new ClientRequest() { SelectedCell = selectedCell });
         }
 
@@ -74,6 +74,11 @@ namespace Forza4Socket
         }
 
         private void btn_Client_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
