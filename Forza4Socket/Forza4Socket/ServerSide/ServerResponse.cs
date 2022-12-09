@@ -10,12 +10,12 @@ namespace Forza4Socket.ServerSide
     [Serializable]
     internal class ServerResponse
     {
-        public Grid? UpdatedGrid { get; init; }
+        public List<List<int>>? Grid { get; init; }
         public bool? IsCellSelectedInvalid { get; init; }
         public Cell? SelectedCell { get; init; }
         public bool? IsGameOver { get; init; }
-        public int? WinningPlayer { get; init; }
-        public int? TurnPlayer { get; init; }
+        public int? WinningPlayerId { get; init; }
+        public int? TurnPlayerId { get; init; }
         public List<Player>? Players { get; init; }
         public bool? GameStarted { get; init; }
 

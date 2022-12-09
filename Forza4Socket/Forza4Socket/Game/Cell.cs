@@ -11,5 +11,7 @@ namespace Forza4Socket.Game
     {
         public int Row { get; init; }
         public int Column { get; init; }
+
+
     }
 }

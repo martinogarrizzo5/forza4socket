@@ -12,11 +12,17 @@ namespace Forza4Socket
     {
         Client client;
         Server server;
+        bool isGridEnabled = false;
 
         public Form1()
         {
             client = new Client(new Action<ServerResponse>(UpdateUIWhenReceivingData), new Action<IPAddress>(OnDeviceDiscovered), new Action(onConnectionAccepted), new Action<List<IPAddress>>(OnDiscoveredFinished));
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            DisablePlayAgain();
         }
 
         private void clientBtn_Click(object sender, EventArgs e)
@@ -26,6 +32,9 @@ namespace Forza4Socket
             {
                 client.ConnectToServer(ip);
             }
+            DisableConnectCommands();
+            ShowGrid();
+            DisableGridInteraction();
         }
 
         private void serverBtn_Click(object sender, EventArgs e)
@@ -34,16 +43,27 @@ namespace Forza4Socket
             server.Setup();
             client.ConnectToServer(IPAddress.Loopback);
             lblTurnPlayer.Text = "In attesa di un giocatore...";
+            DisableConnectCommands();
+            ShowGrid();
+            DisableGridInteraction();
+        }
+
+        private void ShowGrid()
+        {
             dtg_Forza4.ColumnCount = 7;
             dtg_Forza4.RowCount = 6;
             dtg_Forza4.ColumnHeadersVisible = false;
             dtg_Forza4.RowHeadersVisible = false;
             dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.White;
-            for (int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 DataGridViewRow row = dtg_Forza4.Rows[i];
                 row.Height = 69;
             }
+        }
+
+        private void DisableConnectCommands()
+        {
             btn_Server.Enabled = false;
             btn_Connect.Enabled = false;
             btn_Discover.Enabled = false;
@@ -51,17 +71,44 @@ namespace Forza4Socket
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
         {
-            if (data.GameStarted == true)
+            Player? currentPlayer = null;
+
+            if (data.Player != null)
             {
-                if (data.Player != null && data.TurnPlayer != null && data.TurnPlayer != -1)
+                currentPlayer = data.Player;
+            }
+
+            Player enemyPlayer = data.Players!.Find(p => p.Id == data.TurnPlayerId!)!;
+
+            if (data.WinningPlayerId != null && data.IsGameOver == true)
+            {
+                if (data.WinningPlayerId == currentPlayer?.Id)
                 {
-                    if (data.TurnPlayer == data.Player.Id)
+                    lblTurnPlayer.Text = "Hai vinto!!!";
+                }
+                else
+                {
+                    Player winningPlayer = data.Players!.Find(p => p.Id == data.WinningPlayerId!)!;
+                    lblTurnPlayer.Text = $"Ha vinto {winningPlayer.Username}";
+                }
+
+                DisableGridInteraction();
+                EnablePlayAgain();
+            }
+            else if (data.GameStarted == true)
+            {
+                if (currentPlayer != null && data.TurnPlayerId != null && data.TurnPlayerId != -1)
+                {
+                    if (data.TurnPlayerId == data.Player!.Id)
                     {
                         lblTurnPlayer.Text = $"è il tuo turno {data.Player.Username}";
+                        EnableGridInteraction();
                     }
                     else
                     {
-                        lblTurnPlayer.Text = "In attesa della mossa dell'altro giocatore";
+
+                        lblTurnPlayer.Text = $"In attesa della mossa di {enemyPlayer.Username}";
+                        DisableGridInteraction();
                     }
                 }
             }
@@ -76,6 +123,87 @@ namespace Forza4Socket
                     lblTurnPlayer.Text = "In attesa dell'host...";
                 }
             }
+
+            if (data.Grid != null && currentPlayer != null)
+            {
+                int playerId = currentPlayer.Id;
+                if (currentPlayer.GameMode == GameMode.Player)
+                {
+                    UpdateGridUI(data.Grid, playerId);
+                }
+                else
+                {
+                    UpdateSpectatorModeGridUI(data.Grid);
+                }
+            }
+        }
+
+        private void UpdateGridUI(List<List<int>> grid, int yourPawn)
+        {
+            for (int i = 0; i < grid.Count; i++)
+            {
+                for (int j = 0; j < grid[i].Count; j++)
+                {
+                    DataGridViewCellStyle cellStyle = new DataGridViewCellStyle();
+
+                    if (grid[i][j] == yourPawn)
+                    {
+                        cellStyle.BackColor = Color.Yellow;
+                    }
+                    else if (grid[i][j] != -1)
+                    {
+                        cellStyle.BackColor = Color.Red;
+                    }
+
+                    dtg_Forza4[j, i].Style = cellStyle;
+                }
+            }
+        }
+
+        private void UpdateSpectatorModeGridUI(List<List<int>> grid)
+        {
+            List<Color> colors = new List<Color>() { Color.Yellow, Color.Red };
+            List<int> playersId = new List<int>();
+
+            for (int i = 0; i < grid.Count; i++)
+            {
+                for (int j = 0; j < grid[i].Count; j++)
+                {
+                    if (grid[i][j] != -1)
+                    {
+                        int id = playersId.FindIndex(id => id == grid[i][j]);
+                        if (id == -1)
+                        {
+                            playersId.Add(grid[i][j]);
+                            dtg_Forza4[j, i].Style.BackColor = colors[playersId.Count - 1];
+                        }
+                        else
+                        {
+                            dtg_Forza4[j, i].Style.BackColor = colors[id];
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DisableGridInteraction()
+        {
+            isGridEnabled = false;
+        }
+
+        private void EnableGridInteraction()
+        {
+            isGridEnabled = true;
+        }
+
+        private void EnablePlayAgain()
+        {
+            playAgainBtn.Enabled = true;
+        }
+
+        private void DisablePlayAgain()
+        {
+            playAgainBtn.Enabled = false;
         }
 
         private void onConnectionAccepted()
@@ -126,9 +254,38 @@ namespace Forza4Socket
             client.SearchAvailableHosts();
         }
 
-        private void dtg_Forza4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void on_GridCellClick(object sender, DataGridViewCellEventArgs e)
         {
+            dtg_Forza4.CurrentCell.Selected = false;
+            if (!isGridEnabled) return;
 
+            int row = e.RowIndex;
+            int col = e.ColumnIndex;
+
+            if (client.IsConnected())
+            {
+                ClientRequest request = new ClientRequest()
+                {
+                    SelectedCell = new Cell()
+                    {
+                        Row = row,
+                        Column = col,
+                    }
+                };
+                client.SendDataToServer(request);
+            }
+        }
+
+        private void playAgainBtn_Click(object sender, EventArgs e)
+        {
+            if (client.IsConnected())
+            {
+                ClientRequest request = new ClientRequest()
+                {
+                    PlayAgain = true,
+                };
+                client.SendDataToServer(request);
+            }
         }
     }
 }

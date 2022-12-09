@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 namespace Forza4Socket.Game
 {
     [Serializable]
-    internal class Grid
+    internal class Forza4
     {
         public int Columns { get; private set; }
         public int Rows { get; private set; }
         public int RequiredPawns { get; private set; }
         public List<List<int>> GameGrid { get; private set; }
 
-        public Grid()
+        public Forza4()
         {
             Columns = 7;
             Rows = 6;
             RequiredPawns = 4;
-
             GameGrid = new List<List<int>>();
+
             // insert default value 0
             for (int i = 0; i < Rows; i++)
             {
@@ -31,7 +31,9 @@ namespace Forza4Socket.Game
                     GameGrid[i].Add(-1);
                 }
             }
+
         }
+
         public bool CheckVictory(int pawn)
         {
             bool anyColumnValid = CheckColumns(pawn);
@@ -137,7 +139,7 @@ namespace Forza4Socket.Game
 
             while (i < Rows && !isPositionFound)
             {
-                if (GameGrid[i][column] == -1)
+                if (GameGrid[i][column] != -1)
                 {
                     isPositionFound = true;
                 }
@@ -145,6 +147,8 @@ namespace Forza4Socket.Game
                 {
                     position = i;
                 }
+
+                i++;
             }
 
             if (position != -1)

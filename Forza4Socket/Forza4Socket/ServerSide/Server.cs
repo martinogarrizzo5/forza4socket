@@ -13,7 +13,7 @@ namespace Forza4Socket.ServerSide
         private byte[] Buffer;
         private List<Socket> ClientSockets;
         private Socket ServerSocket;
-        private Grid Grid;
+        private Forza4 Forza4;
         private List<Player> Players;
         private List<Player> ActivePlayers;
         private int TurnPlayerId = -1;
@@ -30,7 +30,7 @@ namespace Forza4Socket.ServerSide
             Players = new List<Player>();
             ActivePlayers = new List<Player>();
             ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Grid = new Grid();
+            Forza4 = new Forza4();
         }
 
         public void Setup()
@@ -196,6 +196,7 @@ namespace Forza4Socket.ServerSide
             int senderId = ClientSockets.FindIndex((s) => s == requestSender);
             int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
 
+            // handle the case in which a player wants to start playing or specting the current game
             if (req.CanPlayGame == true)
             {
                 // create new player only if it's not already in list and if there's a valid socket associated
@@ -209,18 +210,22 @@ namespace Forza4Socket.ServerSide
                     };
 
                     Players.Add(newPlayer);
-                    if (ActivePlayers.Count < REQUIRED_PLAYERS) ActivePlayers.Add(newPlayer);
-
-                    if (ActivePlayers.Count == REQUIRED_PLAYERS)
+                    if (ActivePlayers.Count < REQUIRED_PLAYERS)
                     {
-                        TurnPlayerId = ActivePlayers[0].Id;
-                    }
+                        ActivePlayers.Add(newPlayer);
+                        // start game
+                        if (ActivePlayers.Count == REQUIRED_PLAYERS)
+                        {
+                            TurnPlayerId = ActivePlayers[0].Id;
+                        }
+                    };
                 }
             }
 
-            if (req.SelectedCell != null)
+            if (req.SelectedCell != null && ActivePlayers.Count == REQUIRED_PLAYERS && TurnPlayerId == senderId
+                && ActivePlayers[senderId].GameMode == GameMode.Player && WinningPlayerId == -1)
             {
-                bool isValidCell = Grid.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
+                bool isValidCell = Forza4.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
                 if (isValidCell)
                 {
                     ChangeTurnPlayer();
@@ -237,13 +242,9 @@ namespace Forza4Socket.ServerSide
                 HandleDisconnectedClient(requestSender);
             }
 
-            if (ActivePlayers.Count == 1)
+            if (ActivePlayers.Count == REQUIRED_PLAYERS)
             {
-                WinningPlayerId = ActivePlayers[0].Id; // server is the winner if the other player disconnects
-            }
-            else if (ActivePlayers.Count == REQUIRED_PLAYERS)
-            {
-                WinningPlayerId = ActivePlayers.FindIndex((p) => Grid.CheckVictory(p.Id));
+                WinningPlayerId = ActivePlayers.FindIndex((p) => Forza4.CheckVictory(p.Id));
             }
 
         }
@@ -258,11 +259,11 @@ namespace Forza4Socket.ServerSide
 
             ServerResponse res = new ServerResponse()
             {
-                TurnPlayer = TurnPlayerId,
+                TurnPlayerId = TurnPlayerId,
                 Players = Players,
-                GameStarted = Players.Count == REQUIRED_PLAYERS,
-                UpdatedGrid = Grid,
-                WinningPlayer = WinningPlayerId > -1 ? WinningPlayerId : null,
+                GameStarted = ActivePlayers.Count == REQUIRED_PLAYERS,
+                Grid = Forza4.GameGrid,
+                WinningPlayerId = WinningPlayerId > -1 ? WinningPlayerId : null,
                 Player = receiverPlayerIndex > -1 ? Players[receiverPlayerIndex] : null,
                 IsGameOver = WinningPlayerId > -1,
                 IsCellSelectedInvalid = InvalidCellClicked,
@@ -302,7 +303,7 @@ namespace Forza4Socket.ServerSide
                 ClientSockets.Clear();
                 Players.Clear();
                 ActivePlayers.Clear();
-                Grid.ClearGrid();
+                Forza4.ClearGrid();
             }
             catch (Exception ex)
             {

@@ -16,5 +16,6 @@ namespace Forza4Socket.ClientSide
 
         // only clients that specify in the request that they want to play can be seen as players by the server
         public bool? CanPlayGame { get; init; }
+        public bool? PlayAgain { get; init; }
     }
 }
