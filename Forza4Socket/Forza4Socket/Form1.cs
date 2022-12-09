@@ -71,7 +71,12 @@ namespace Forza4Socket
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
         {
-            Player? currentPlayer = data.Player ?? null;
+            Player? currentPlayer = null;
+            if (data.Player != null)
+            {
+                currentPlayer = data.Player;
+                lblUser.Text = $"Il tuo username: {currentPlayer.Username}";
+            }
 
             if (data.WinningPlayerId != null && data.IsGameOver == true)
             {
@@ -130,7 +135,7 @@ namespace Forza4Socket
                 }
             }
 
-            if (data.Grid != null && currentPlayer != null)
+            if (data.Grid != null && currentPlayer != null && data.Players != null)
             {
                 int playerId = currentPlayer.Id;
                 if (currentPlayer.GameMode == GameMode.Player)
@@ -292,6 +297,11 @@ namespace Forza4Socket
                 };
                 client.SendDataToServer(request);
             }
+        }
+
+        private void on_localAddressChange(object sender, EventArgs e)
+        {
+            client.ChangeLocalNetworkAddress(localAddressTextBox.Text);
         }
     }
 }

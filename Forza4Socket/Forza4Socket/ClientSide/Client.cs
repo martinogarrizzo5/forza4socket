@@ -15,6 +15,7 @@ namespace Forza4Socket.ClientSide
         Action<IPAddress> ActionOnDeviceDiscovered;
         Action ActionOnServerConnectionAccepted;
         Action<List<IPAddress>> ActionOnDiscoverFinished;
+        string localNetworkAddress = "192.168.1.0";
 
         public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted, Action<List<IPAddress>> onDiscoverFinished)
         {
@@ -22,6 +23,11 @@ namespace Forza4Socket.ClientSide
             ActionOnDeviceDiscovered = onDeviceDiscovered;
             ActionOnServerConnectionAccepted = onConnectionAccepted;
             ActionOnDiscoverFinished = onDiscoverFinished;
+        }
+
+        public void ChangeLocalNetworkAddress(string address)
+        {
+            localNetworkAddress = address;
         }
 
         public bool IsConnected()
@@ -162,7 +168,7 @@ namespace Forza4Socket.ClientSide
 
         public void SearchAvailableHosts()
         {
-            NetworkDiscovery discoveryService = new NetworkDiscovery(ActionOnDeviceDiscovered, ActionOnDiscoverFinished);
+            NetworkDiscovery discoveryService = new NetworkDiscovery(localNetworkAddress, ActionOnDeviceDiscovered, ActionOnDiscoverFinished);
             discoveryService.DiscoverLocalNetworkHosts(Server.KNOWN_PORT);
         }
     }

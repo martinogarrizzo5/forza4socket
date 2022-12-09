@@ -35,14 +35,16 @@
             this.lbl_Titolo = new System.Windows.Forms.Label();
             this.lbl_Titolo2 = new System.Windows.Forms.Label();
             this.grb_RegoleEAvvio = new System.Windows.Forms.GroupBox();
+            this.localAddressTextBox = new System.Windows.Forms.TextBox();
             this.searchingLbl = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.usernameTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btn_Discover = new System.Windows.Forms.Button();
             this.lstHosts = new System.Windows.Forms.ListBox();
             this.grb_Forza4 = new System.Windows.Forms.GroupBox();
+            this.lblUser = new System.Windows.Forms.Label();
             this.lblTurnPlayer = new System.Windows.Forms.Label();
             this.playAgainBtn = new System.Windows.Forms.Button();
             this.lbl_Vincitore = new System.Windows.Forms.Label();
@@ -75,7 +77,7 @@
             // 
             // btn_Server
             // 
-            this.btn_Server.Location = new System.Drawing.Point(75, 416);
+            this.btn_Server.Location = new System.Drawing.Point(75, 407);
             this.btn_Server.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Server.Name = "btn_Server";
             this.btn_Server.Size = new System.Drawing.Size(86, 31);
@@ -108,10 +110,11 @@
             // 
             // grb_RegoleEAvvio
             // 
+            this.grb_RegoleEAvvio.Controls.Add(this.localAddressTextBox);
             this.grb_RegoleEAvvio.Controls.Add(this.searchingLbl);
             this.grb_RegoleEAvvio.Controls.Add(this.label35);
             this.grb_RegoleEAvvio.Controls.Add(this.usernameTextBox);
-            this.grb_RegoleEAvvio.Controls.Add(this.label2);
+            this.grb_RegoleEAvvio.Controls.Add(this.lblUsername);
             this.grb_RegoleEAvvio.Controls.Add(this.label1);
             this.grb_RegoleEAvvio.Controls.Add(this.btn_Discover);
             this.grb_RegoleEAvvio.Controls.Add(this.lstHosts);
@@ -128,6 +131,15 @@
             this.grb_RegoleEAvvio.TabIndex = 5;
             this.grb_RegoleEAvvio.TabStop = false;
             this.grb_RegoleEAvvio.Text = "REGOLE E AVVIO";
+            // 
+            // textBox1
+            // 
+            this.localAddressTextBox.Location = new System.Drawing.Point(207, 443);
+            this.localAddressTextBox.Name = "textBox1";
+            this.localAddressTextBox.Size = new System.Drawing.Size(211, 27);
+            this.localAddressTextBox.TabIndex = 12;
+            this.localAddressTextBox.Text = "192.168.1.0";
+            this.localAddressTextBox.TextChanged += new System.EventHandler(this.on_localAddressChange);
             // 
             // searchingLbl
             // 
@@ -153,19 +165,19 @@
             this.usernameTextBox.Size = new System.Drawing.Size(259, 27);
             this.usernameTextBox.TabIndex = 9;
             // 
-            // label2
+            // lblUsername
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(205, 392);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(92, 20);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Join A Game";
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(207, 416);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(92, 20);
+            this.lblUsername.TabIndex = 8;
+            this.lblUsername.Text = "Join A Game";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(75, 392);
+            this.label1.Location = new System.Drawing.Point(75, 383);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 20);
             this.label1.TabIndex = 7;
@@ -186,13 +198,14 @@
             // 
             this.lstHosts.FormattingEnabled = true;
             this.lstHosts.ItemHeight = 20;
-            this.lstHosts.Location = new System.Drawing.Point(205, 416);
+            this.lstHosts.Location = new System.Drawing.Point(207, 476);
             this.lstHosts.Name = "lstHosts";
             this.lstHosts.Size = new System.Drawing.Size(348, 184);
             this.lstHosts.TabIndex = 5;
             // 
             // grb_Forza4
             // 
+            this.grb_Forza4.Controls.Add(this.lblUser);
             this.grb_Forza4.Controls.Add(this.lblTurnPlayer);
             this.grb_Forza4.Controls.Add(this.playAgainBtn);
             this.grb_Forza4.Controls.Add(this.lbl_Vincitore);
@@ -206,6 +219,14 @@
             this.grb_Forza4.TabIndex = 6;
             this.grb_Forza4.TabStop = false;
             this.grb_Forza4.Text = "FORZA 4";
+            // 
+            // lblUser
+            // 
+            this.lblUser.AutoSize = true;
+            this.lblUser.Location = new System.Drawing.Point(18, 64);
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(0, 20);
+            this.lblUser.TabIndex = 12;
             // 
             // lblTurnPlayer
             // 
@@ -294,7 +315,7 @@
         private Label lbl_Vincitore;
         private Label gameStatusLbl;
         private Button playAgainBtn;
-        private Label label2;
+        private Label lblUsername;
         private Label label1;
         private Button btn_Discover;
         private ListBox lstHosts;
@@ -302,5 +323,7 @@
         private Label label35;
         private TextBox usernameTextBox;
         private Label searchingLbl;
+        private Label lblUser;
+        private TextBox localAddressTextBox;
     }
 }

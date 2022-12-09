@@ -13,9 +13,11 @@ namespace Forza4Socket.Network
 
         System.Timers.Timer timer = new System.Timers.Timer(4000);
         List<SocketAsyncEventArgs> list = new List<SocketAsyncEventArgs>();
+        string localNetworkAddress;
 
-        public NetworkDiscovery(Action<IPAddress> onNewHostAvailable, Action<List<IPAddress>> OnDiscoveryFinished)
+        public NetworkDiscovery(string networkAddress, Action<IPAddress> onNewHostAvailable, Action<List<IPAddress>> OnDiscoveryFinished)
         {
+            localNetworkAddress = networkAddress;
             ActionOnNewHostAvailable = onNewHostAvailable;
             ActionOnDiscoveryFinished = OnDiscoveryFinished;
             timer.Elapsed += OnTimerExpiration;
@@ -23,10 +25,13 @@ namespace Forza4Socket.Network
 
         public void DiscoverLocalNetworkHosts(int port)
         {
+            int hostIdIndex = localNetworkAddress.LastIndexOf('.');
+            string netId = new string(localNetworkAddress.Take(hostIdIndex).ToArray());
+
             timer.Start();
             Parallel.For(1, 255, (i, loopState) =>
             {
-                ConnectTo("192.168.1." + i, port);
+                ConnectTo($"{netId}.{i}", port);
             });
         }
 

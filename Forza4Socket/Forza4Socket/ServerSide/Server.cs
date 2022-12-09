@@ -267,7 +267,7 @@ namespace Forza4Socket.ServerSide
                 Player = receiverPlayerIndex > -1 ? Players[receiverPlayerIndex] : null,
                 IsGameOver = WinningPlayerId > -1,
                 IsCellSelectedInvalid = InvalidCellClicked,
-                SelectedCell = req.SelectedCell,
+                LastSelectedCell = req.SelectedCell,
             };
 
             return res;

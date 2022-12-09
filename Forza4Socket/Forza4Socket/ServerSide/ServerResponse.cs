@@ -12,7 +12,7 @@ namespace Forza4Socket.ServerSide
     {
         public List<List<int>>? Grid { get; init; }
         public bool? IsCellSelectedInvalid { get; init; }
-        public Cell? SelectedCell { get; init; }
+        public Cell? LastSelectedCell { get; init; }
         public bool? IsGameOver { get; init; }
         public int? WinningPlayerId { get; init; }
         public int? TurnPlayerId { get; init; }
