@@ -71,14 +71,7 @@ namespace Forza4Socket
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
         {
-            Player? currentPlayer = null;
-
-            if (data.Player != null)
-            {
-                currentPlayer = data.Player;
-            }
-
-            Player enemyPlayer = data.Players!.Find(p => p.Id == data.TurnPlayerId!)!;
+            Player? currentPlayer = data.Player ?? null;
 
             if (data.WinningPlayerId != null && data.IsGameOver == true)
             {
@@ -93,7 +86,10 @@ namespace Forza4Socket
                 }
 
                 DisableGridInteraction();
-                EnablePlayAgain();
+                if (currentPlayer != null && currentPlayer.GameMode != GameMode.Spectator)
+                {
+                    EnablePlayAgain();
+                }
             }
             else if (data.GameStarted == true)
             {
@@ -103,12 +99,22 @@ namespace Forza4Socket
                     {
                         lblTurnPlayer.Text = $"è il tuo turno {data.Player.Username}";
                         EnableGridInteraction();
+
+                        if (data.IsCellSelectedInvalid == true)
+                        {
+                            lblTurnPlayer.Text = $"Mossa non valida {data.Player.Username}";
+                        }
                     }
                     else
                     {
-
+                        Player enemyPlayer = data.Players!.Find(p => p.Id == data.TurnPlayerId!)!;
                         lblTurnPlayer.Text = $"In attesa della mossa di {enemyPlayer.Username}";
                         DisableGridInteraction();
+
+                        if (data.IsCellSelectedInvalid == true)
+                        {
+                            lblTurnPlayer.Text = $"In attesa che {data.Player.Username} faccia una mossa valida";
+                        }
                     }
                 }
             }
@@ -133,7 +139,8 @@ namespace Forza4Socket
                 }
                 else
                 {
-                    UpdateSpectatorModeGridUI(data.Grid);
+                    List<int> activePlayersId = data.Players.Where(p => p.GameMode == GameMode.Player).Select((p) => p.Id).ToList();
+                    UpdateSpectatorModeGridUI(data.Grid, activePlayersId);
                 }
             }
         }
@@ -160,10 +167,9 @@ namespace Forza4Socket
             }
         }
 
-        private void UpdateSpectatorModeGridUI(List<List<int>> grid)
+        private void UpdateSpectatorModeGridUI(List<List<int>> grid, List<int> playersId)
         {
             List<Color> colors = new List<Color>() { Color.Yellow, Color.Red };
-            List<int> playersId = new List<int>();
 
             for (int i = 0; i < grid.Count; i++)
             {

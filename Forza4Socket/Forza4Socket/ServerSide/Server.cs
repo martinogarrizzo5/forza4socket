@@ -206,7 +206,7 @@ namespace Forza4Socket.ServerSide
                     {
                         Id = senderId,
                         GameMode = ActivePlayers.Count < REQUIRED_PLAYERS ? GameMode.Player : GameMode.Spectator,
-                        Username = req.Username != null ? req.Username : $"Guest-{senderId}"
+                        Username = req.Username != null && req.Username != "" ? req.Username : $"Guest-{senderId}"
                     };
 
                     Players.Add(newPlayer);
