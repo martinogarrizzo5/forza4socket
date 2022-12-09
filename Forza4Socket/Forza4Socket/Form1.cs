@@ -4,6 +4,7 @@ using Forza4Socket.Game;
 using Forza4Socket.Network;
 using System.Net;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Forza4Socket
 {
@@ -32,8 +33,20 @@ namespace Forza4Socket
             server = new Server();
             server.Setup();
             client.ConnectToServer(IPAddress.Loopback);
-
             lblTurnPlayer.Text = "In attesa di un giocatore...";
+            dtg_Forza4.ColumnCount = 7;
+            dtg_Forza4.RowCount = 6;
+            dtg_Forza4.ColumnHeadersVisible = false;
+            dtg_Forza4.RowHeadersVisible = false;
+            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.White;
+            for (int i=0; i<6; i++)
+            {
+                DataGridViewRow row = dtg_Forza4.Rows[i];
+                row.Height = 69;
+            }
+            btn_Server.Enabled = false;
+            btn_Connect.Enabled = false;
+            btn_Discover.Enabled = false;
         }
 
         private void UpdateUIWhenReceivingData(ServerResponse data)
@@ -111,6 +124,11 @@ namespace Forza4Socket
             searchingLbl.Text = "Searching...";
             lstHosts.Items.Clear();
             client.SearchAvailableHosts();
+        }
+
+        private void dtg_Forza4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

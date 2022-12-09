@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marti\\Desktop\\windows-apps\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj": {}
+    "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marti\\Desktop\\windows-apps\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj": {
+    "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marti\\Desktop\\windows-apps\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
+        "projectUniqueName": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
         "projectName": "Forza4Socket",
-        "projectPath": "C:\\Users\\marti\\Desktop\\windows-apps\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
-        "packagesPath": "C:\\Users\\marti\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marti\\Desktop\\windows-apps\\forza4socket\\Forza4Socket\\Forza4Socket\\obj\\",
+        "projectPath": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\Forza4Socket.csproj",
+        "packagesPath": "C:\\Users\\Nicola\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nicola\\Desktop\\CLASSE QUARTA\\Sistemi e Reti\\Forza 4\\forza4socket\\Forza4Socket\\Forza4Socket\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\marti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Nicola\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0-windows7.0"
+          "net6.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -45,7 +45,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -57,7 +58,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
