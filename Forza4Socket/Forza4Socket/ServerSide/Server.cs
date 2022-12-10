@@ -11,7 +11,7 @@ namespace Forza4Socket.ServerSide
     internal class Server
     {
         private byte[] Buffer;
-        private List<Socket> ClientSockets;
+        private List<ConnectedSocket> ClientSockets;
         private Socket ServerSocket;
         private Forza4 Forza4;
         private List<Player> Players;
@@ -20,13 +20,14 @@ namespace Forza4Socket.ServerSide
         private int WinningPlayerId = -1;
         private bool InvalidCellClicked = false;
         const int REQUIRED_PLAYERS = 2;
+        int nextId = 0;
 
         public static int KNOWN_PORT = 11000;
 
         public Server()
         {
             Buffer = new byte[1024]; // TODO: use multiple buffers
-            ClientSockets = new List<Socket>();
+            ClientSockets = new List<ConnectedSocket>();
             Players = new List<Player>();
             ActivePlayers = new List<Player>();
             ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -58,7 +59,7 @@ namespace Forza4Socket.ServerSide
                 Socket socket = ServerSocket.EndAccept(asyncResult);
                 Console.WriteLine("Server: A client has been connected");
 
-                ClientSockets.Add(socket);
+                ClientSockets.Add(new ConnectedSocket(socket));
                 // listen for possible incoming data
                 socket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(OnDataReceived), socket);
 
@@ -93,10 +94,10 @@ namespace Forza4Socket.ServerSide
                     HandleRequest(req, socket);
 
                     // tell all clients the new state of the game
-                    foreach (Socket client in ClientSockets)
+                    foreach (ConnectedSocket client in ClientSockets)
                     {
-                        ServerResponse res = GenerateResponse(req, socket, client);
-                        SendDataToClient(client, res);
+                        ServerResponse res = GenerateResponse(req, socket, client.Socket);
+                        SendDataToClient(client.Socket, res);
                     }
                 }
 
@@ -174,12 +175,13 @@ namespace Forza4Socket.ServerSide
             {
                 Console.WriteLine("Server: A client disconnected");
 
-                int id = ClientSockets.FindIndex((s) => socket == s);
-                if (id != -1)
+                int index = ClientSockets.FindIndex((s) => socket == s.Socket);
+                if (index != -1)
                 {
-                    ClientSockets.RemoveAt(id);
-                    Players.RemoveAll((p) => p.Id == id);
-                    ActivePlayers.RemoveAll((p) => p.Id == id);
+                    ConnectedSocket disconnectedSocket = ClientSockets[index];
+                    ClientSockets.RemoveAt(index);
+                    Players.RemoveAll((p) => p == disconnectedSocket.Player);
+                    ActivePlayers.RemoveAll((p) => p == disconnectedSocket.Player);
                 }
 
                 socket.Shutdown(SocketShutdown.Both);
@@ -193,23 +195,28 @@ namespace Forza4Socket.ServerSide
 
         private void HandleRequest(ClientRequest req, Socket requestSender)
         {
-            int senderId = ClientSockets.FindIndex((s) => s == requestSender);
-            int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
+            int senderIndex = ClientSockets.FindIndex((s) => s.Socket == requestSender);
+            if (senderIndex == -1) return;
+
+            ConnectedSocket sender = ClientSockets[senderIndex];
 
             // handle the case in which a player wants to start playing or specting the current game
             if (req.CanPlayGame == true)
             {
-                // create new player only if it's not already in list and if there's a valid socket associated
-                if (senderId != -1 && senderPlayerIndex == -1)
+                // create new player
+                if (sender.Player == null)
                 {
                     Player newPlayer = new Player()
                     {
-                        Id = senderId,
+                        Id = nextId,
                         GameMode = ActivePlayers.Count < REQUIRED_PLAYERS ? GameMode.Player : GameMode.Spectator,
-                        Username = req.Username != null && req.Username != "" ? req.Username : $"Guest-{senderId}"
+                        Username = req.Username != null && req.Username != "" ? req.Username : $"Guest-{nextId}"
                     };
+                    nextId++;
 
                     Players.Add(newPlayer);
+                    sender.Player = newPlayer;
+
                     if (ActivePlayers.Count < REQUIRED_PLAYERS)
                     {
                         ActivePlayers.Add(newPlayer);
@@ -222,10 +229,10 @@ namespace Forza4Socket.ServerSide
                 }
             }
 
-            if (req.SelectedCell != null && ActivePlayers.Count == REQUIRED_PLAYERS && TurnPlayerId == senderId
-                && ActivePlayers[senderId].GameMode == GameMode.Player && WinningPlayerId == -1)
+            if (req.SelectedCell != null && ActivePlayers.Count == REQUIRED_PLAYERS && TurnPlayerId == senderIndex
+                && ActivePlayers[senderIndex].GameMode == GameMode.Player && WinningPlayerId == -1)
             {
-                bool isValidCell = Forza4.InsertPawn(senderId, req.SelectedCell.Row, req.SelectedCell.Column);
+                bool isValidCell = Forza4.InsertPawn(senderIndex, req.SelectedCell.Row, req.SelectedCell.Column);
                 if (isValidCell)
                 {
                     ChangeTurnPlayer();
@@ -249,13 +256,12 @@ namespace Forza4Socket.ServerSide
 
         }
 
-        private ServerResponse GenerateResponse(ClientRequest req, Socket requestSender, Socket receiverClient)
+        private ServerResponse? GenerateResponse(ClientRequest req, Socket requestSender, Socket receiverClient)
         {
-            int senderId = ClientSockets.FindIndex((s) => s == requestSender);
-            int senderPlayerIndex = Players.FindIndex((player) => player.Id == senderId);
+            int receiverIndex = ClientSockets.FindIndex((s) => s.Socket == receiverClient);
+            if (receiverIndex == -1) return null;
 
-            int receiverId = ClientSockets.FindIndex((s) => s == receiverClient);
-            int receiverPlayerIndex = Players.FindIndex((p) => p.Id == receiverId);
+            Player? receiverPlayer = ClientSockets[receiverIndex].Player;
 
             ServerResponse res = new ServerResponse()
             {
@@ -264,7 +270,7 @@ namespace Forza4Socket.ServerSide
                 GameStarted = ActivePlayers.Count == REQUIRED_PLAYERS,
                 Grid = Forza4.GameGrid,
                 WinningPlayerId = WinningPlayerId > -1 ? WinningPlayerId : null,
-                Player = receiverPlayerIndex > -1 ? Players[receiverPlayerIndex] : null,
+                Player = receiverPlayer != null ? receiverPlayer : null,
                 IsGameOver = WinningPlayerId > -1,
                 IsCellSelectedInvalid = InvalidCellClicked,
                 LastSelectedCell = req.SelectedCell,
@@ -291,13 +297,13 @@ namespace Forza4Socket.ServerSide
         {
             try
             {
-                foreach (Socket socket in ClientSockets)
+                foreach (ConnectedSocket client in ClientSockets)
                 {
-                    if (socket.Connected)
+                    if (client.Socket.Connected)
                     {
                         // a zero bytes response will be sent to all clients when closing the socket
-                        socket.Shutdown(SocketShutdown.Both);
-                        socket.Close();
+                        client.Socket.Shutdown(SocketShutdown.Both);
+                        client.Socket.Close();
                     }
                 }
                 ClientSockets.Clear();

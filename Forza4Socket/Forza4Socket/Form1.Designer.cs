@@ -132,10 +132,10 @@
             this.grb_RegoleEAvvio.TabStop = false;
             this.grb_RegoleEAvvio.Text = "REGOLE E AVVIO";
             // 
-            // textBox1
+            // localAddressTextBox
             // 
             this.localAddressTextBox.Location = new System.Drawing.Point(207, 443);
-            this.localAddressTextBox.Name = "textBox1";
+            this.localAddressTextBox.Name = "localAddressTextBox";
             this.localAddressTextBox.Size = new System.Drawing.Size(211, 27);
             this.localAddressTextBox.TabIndex = 12;
             this.localAddressTextBox.Text = "192.168.1.0";
@@ -170,9 +170,9 @@
             this.lblUsername.AutoSize = true;
             this.lblUsername.Location = new System.Drawing.Point(207, 416);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(92, 20);
+            this.lblUsername.Size = new System.Drawing.Size(200, 20);
             this.lblUsername.TabIndex = 8;
-            this.lblUsername.Text = "Join A Game";
+            this.lblUsername.Text = "Join A Game On the Network";
             // 
             // label1
             // 
