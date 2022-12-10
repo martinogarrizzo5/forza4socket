@@ -34,3 +34,21 @@ C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\D
 C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.pdb
 C:\Users\marti\Desktop\windows-apps\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.genruntimeconfig.cache
 C:\Users\Nicola\Desktop\CLASSE QUARTA\Sistemi e Reti\Forza 4\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Form1.resources
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.exe
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.deps.json
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.runtimeconfig.json
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.dll
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\bin\Debug\net6.0-windows\Forza4Socket.pdb
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.AssemblyReference.cache
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Form1.resources
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.Properties.Resources.resources
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.GenerateResource.cache
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.AssemblyInfoInputs.cache
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.AssemblyInfo.cs
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.csproj.CoreCompileInputs.cache
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.dll
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\refint\Forza4Socket.dll
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.pdb
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\Forza4Socket.genruntimeconfig.cache
+C:\Users\Utente\Documents\GitHub\forza4socket\Forza4Socket\Forza4Socket\obj\Debug\net6.0-windows\ref\Forza4Socket.dll
