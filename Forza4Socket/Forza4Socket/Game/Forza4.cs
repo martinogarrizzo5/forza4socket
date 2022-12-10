@@ -99,24 +99,24 @@ namespace Forza4Socket.Game
 
         public bool CheckAllDiagonals(int p)
         {
-            // right diagonals
-            for (int n = 0; n < 3; n++)
+            // check positively slopped diagonals
+            for (int c = 0; c < Columns - 3; c++)
             {
-                for (int a = 0; a + 3 < 7; a++)
+                for (int r = 0; r < Rows - 3; r++)
                 {
-                    if (GameGrid[n][a + 3] == p && GameGrid[n + 1][a + 2] == p && GameGrid[n + 2][a + 1] == p && GameGrid[n + 3][a] == p)
+                    if (GameGrid[r][c] == p && GameGrid[r + 1][c + 1] == p && GameGrid[r + 2][c + 2] == p && GameGrid[r + 3][c + 3] == p)
                     {
                         return true;
                     }
                 }
             }
 
-            // left diagonals
-            for (int n = 0; n < 3; n++)
+            // check negatively slopped diagonals
+            for (int c = 0; c < Columns - 3; c++)
             {
-                for (int a = 3; a > 0; a--)
+                for (int r = 0; r < Rows - 3; r++)
                 {
-                    if (GameGrid[n][a + 3] == p && GameGrid[n + 1][a + 2] == p && GameGrid[n + 2][a + 1] == p && GameGrid[n + 3][a] == p)
+                    if (GameGrid[r][c] == p && GameGrid[r - 1][c + 1] == p && GameGrid[r - 2][c + 2] == p && GameGrid[r - 3][c + 3] == p)
                     {
                         return true;
                     }
