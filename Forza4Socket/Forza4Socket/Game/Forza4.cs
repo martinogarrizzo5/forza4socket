@@ -99,11 +99,24 @@ namespace Forza4Socket.Game
 
         public bool CheckAllDiagonals(int p)
         {
-            for (int y = 0; y < Rows; y++)
+            // right diagonals
+            for (int n = 0; n < 3; n++)
             {
-                for (int x = 0; x < Columns; x++)
+                for (int a = 0; a + 3 < 7; a++)
                 {
-                    if (CheckDiagonals(x, y, p))
+                    if (GameGrid[n][a + 3] == p && GameGrid[n + 1][a + 2] == p && GameGrid[n + 2][a + 1] == p && GameGrid[n + 3][a] == p)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // left diagonals
+            for (int n = 0; n < 3; n++)
+            {
+                for (int a = 3; a > 0; a--)
+                {
+                    if (GameGrid[n][a + 3] == p && GameGrid[n + 1][a + 2] == p && GameGrid[n + 2][a + 1] == p && GameGrid[n + 3][a] == p)
                     {
                         return true;
                     }
@@ -111,26 +124,6 @@ namespace Forza4Socket.Game
             }
 
             return false;
-        }
-
-        public bool CheckDiagonals(int x, int y, int player)
-        {
-            int diagonalSum = 0;
-
-            for (int i = -2; i <= 2; i++)
-            {
-                // Check if the cell is within the bounds of the board
-                if (x + i >= 0 && x + i < Columns && y + i >= 0 && y + i < Rows)
-                {
-                    // Add the value of the cell to the diagonal sum if it contains the given pawn
-                    if (GameGrid[y + i][x + i] == player)
-                    {
-                        diagonalSum += player;
-                    }
-                }
-            }
-
-            return diagonalSum == RequiredPawns * player;
         }
 
 
