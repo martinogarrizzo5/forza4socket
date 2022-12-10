@@ -271,6 +271,7 @@
             this.dtg_Forza4.AllowUserToResizeColumns = false;
             this.dtg_Forza4.AllowUserToResizeRows = false;
             this.dtg_Forza4.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtg_Forza4.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dtg_Forza4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtg_Forza4.Location = new System.Drawing.Point(7, 88);
             this.dtg_Forza4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
