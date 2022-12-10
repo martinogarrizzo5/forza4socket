@@ -9,13 +9,13 @@ namespace Forza4Socket.ClientSide
 {
     internal class Client
     {
-        Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        byte[] Buffer = new byte[1024];
-        Action<ServerResponse> ActionOnDataReceived;
-        Action<IPAddress> ActionOnDeviceDiscovered;
-        Action ActionOnServerConnectionAccepted;
-        Action<List<IPAddress>> ActionOnDiscoverFinished;
-        string localNetworkAddress = "192.168.1.0";
+        private Socket Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private byte[] Buffer = new byte[1024];
+        private Action<ServerResponse> ActionOnDataReceived;
+        private Action<IPAddress> ActionOnDeviceDiscovered;
+        private Action ActionOnServerConnectionAccepted;
+        private Action<List<IPAddress>> ActionOnDiscoverFinished;
+        private string localNetworkAddress = "192.168.1.0";
 
         public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted, Action<List<IPAddress>> onDiscoverFinished)
         {

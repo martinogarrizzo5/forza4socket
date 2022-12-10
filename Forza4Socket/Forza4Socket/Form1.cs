@@ -28,13 +28,14 @@ namespace Forza4Socket
         private void clientBtn_Click(object sender, EventArgs e)
         {
             IPAddress ip = (IPAddress?)lstHosts.SelectedItem;
-            if (ip != null)
+
+            if (ip != null && ip.ToString() != "")
             {
                 client.ConnectToServer(ip);
+                DisableConnectCommands();
+                ShowGrid();
+                DisableGridInteraction();
             }
-            DisableConnectCommands();
-            ShowGrid();
-            DisableGridInteraction();
         }
 
         private void serverBtn_Click(object sender, EventArgs e)

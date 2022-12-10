@@ -170,9 +170,9 @@
             this.lblUsername.AutoSize = true;
             this.lblUsername.Location = new System.Drawing.Point(207, 416);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(92, 20);
+            this.lblUsername.Size = new System.Drawing.Size(200, 20);
             this.lblUsername.TabIndex = 8;
-            this.lblUsername.Text = "Join A Game";
+            this.lblUsername.Text = "Join A Game On the Network";
             // 
             // label1
             // 
