@@ -40,7 +40,7 @@ namespace Forza4Socket.ClientSide
             try
             {
                 Socket.BeginConnect(new IPEndPoint(ipAddress, Server.KNOWN_PORT),
-                    new AsyncCallback(OnConnectionAccepted), null);
+                    new AsyncCallback(OnConnectionResult), null);
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace Forza4Socket.ClientSide
             }
         }
 
-        private void OnConnectionAccepted(IAsyncResult asyncResult)
+        private void OnConnectionResult(IAsyncResult asyncResult)
         {
             try
             {
