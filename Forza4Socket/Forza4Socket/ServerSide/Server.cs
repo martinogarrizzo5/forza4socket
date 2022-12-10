@@ -20,7 +20,7 @@ namespace Forza4Socket.ServerSide
         private int WinningPlayerId = -1;
         private bool InvalidCellClicked = false;
         const int REQUIRED_PLAYERS = 2;
-        int nextId = 0;
+        int nextId = 1;
 
         public static int KNOWN_PORT = 11000;
 
@@ -229,10 +229,12 @@ namespace Forza4Socket.ServerSide
                 }
             }
 
-            if (req.SelectedCell != null && ActivePlayers.Count == REQUIRED_PLAYERS && TurnPlayerId == senderIndex
-                && ActivePlayers[senderIndex].GameMode == GameMode.Player && WinningPlayerId == -1)
+            Player? player = sender.Player;
+
+            if (req.SelectedCell != null && ActivePlayers.Count == REQUIRED_PLAYERS && player != null && TurnPlayerId == player.Id
+                && player.GameMode == GameMode.Player && WinningPlayerId == -1)
             {
-                bool isValidCell = Forza4.InsertPawn(senderIndex, req.SelectedCell.Row, req.SelectedCell.Column);
+                bool isValidCell = Forza4.InsertPawn(player.Id, req.SelectedCell.Row, req.SelectedCell.Column);
                 if (isValidCell)
                 {
                     ChangeTurnPlayer();
@@ -251,7 +253,11 @@ namespace Forza4Socket.ServerSide
 
             if (ActivePlayers.Count == REQUIRED_PLAYERS)
             {
-                WinningPlayerId = ActivePlayers.FindIndex((p) => Forza4.CheckVictory(p.Id));
+                int winningPlayerIndex = ActivePlayers.FindIndex((p) => Forza4.CheckVictory(p.Id));
+                if (winningPlayerIndex != -1)
+                {
+                    WinningPlayerId = ActivePlayers[winningPlayerIndex].Id;
+                }
             }
 
         }

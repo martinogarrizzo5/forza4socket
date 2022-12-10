@@ -38,7 +38,7 @@ namespace Forza4Socket.Game
         {
             bool anyColumnValid = CheckColumns(pawn);
             bool anyRowValid = CheckRows(pawn);
-            bool anyDiagonalValid = CheckDiagonals(pawn);
+            bool anyDiagonalValid = CheckAllDiagonals(pawn);
 
             return anyColumnValid || anyRowValid || anyDiagonalValid;
         }
@@ -97,39 +97,42 @@ namespace Forza4Socket.Game
             return false;
         }
 
-        public bool CheckDiagonals(int p)
+        public bool CheckAllDiagonals(int p)
         {
-            for (int k = 0; k < Columns; k++)
+            for (int y = 0; y < Rows; y++)
             {
-                int start = 0;
-                int end = 0;
-                int i = 0;
-                int j = k;
-
-                while (i < Rows && j < Columns)
+                for (int x = 0; x < Columns; x++)
                 {
-                    if (GameGrid[i][j] == p)
-                    {
-                        end++;
-                    }
-                    else
-                    {
-                        start = j + 1;
-                        end = start;
-                    }
-
-                    if (end - start == RequiredPawns)
+                    if (CheckDiagonals(x, y, p))
                     {
                         return true;
                     }
-
-                    i++;
-                    j++;
                 }
             }
 
             return false;
         }
+
+        public bool CheckDiagonals(int x, int y, int player)
+        {
+            int diagonalSum = 0;
+
+            for (int i = -2; i <= 2; i++)
+            {
+                // Check if the cell is within the bounds of the board
+                if (x + i >= 0 && x + i < Columns && y + i >= 0 && y + i < Rows)
+                {
+                    // Add the value of the cell to the diagonal sum if it contains the given pawn
+                    if (GameGrid[y + i][x + i] == player)
+                    {
+                        diagonalSum += player;
+                    }
+                }
+            }
+
+            return diagonalSum == RequiredPawns * player;
+        }
+
 
         public bool InsertPawn(int pawn, int row, int column)
         {

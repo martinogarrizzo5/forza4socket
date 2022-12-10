@@ -15,7 +15,7 @@ namespace Forza4Socket.ClientSide
         private Action<IPAddress> ActionOnDeviceDiscovered;
         private Action ActionOnServerConnectionAccepted;
         private Action<List<IPAddress>> ActionOnDiscoverFinished;
-        private string localNetworkAddress = "192.168.1.0";
+        public string localNetworkAddress = "192.168.1.0";
 
         public Client(Action<ServerResponse> onDataReceived, Action<IPAddress> onDeviceDiscovered, Action onConnectionAccepted, Action<List<IPAddress>> onDiscoverFinished)
         {

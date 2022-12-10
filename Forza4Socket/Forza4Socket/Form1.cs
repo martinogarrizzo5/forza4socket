@@ -55,7 +55,7 @@ namespace Forza4Socket
             dtg_Forza4.RowCount = 6;
             dtg_Forza4.ColumnHeadersVisible = false;
             dtg_Forza4.RowHeadersVisible = false;
-            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.Transparent;
+            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.White;
             for (int i = 0; i < 6; i++)
             {
                 DataGridViewRow row = dtg_Forza4.Rows[i];
@@ -119,7 +119,7 @@ namespace Forza4Socket
 
                         if (data.IsCellSelectedInvalid == true)
                         {
-                            lblTurnPlayer.Text = $"In attesa che {data.Player.Username} faccia una mossa valida";
+                            lblTurnPlayer.Text = $"In attesa che {enemyPlayer.Username} faccia una mossa valida";
                         }
                     }
                 }
@@ -183,15 +183,15 @@ namespace Forza4Socket
                 {
                     if (grid[i][j] != -1)
                     {
-                        int id = playersId.FindIndex(id => id == grid[i][j]);
-                        if (id == -1)
+                        int index = playersId.FindIndex(id => id == grid[i][j]);
+                        if (index == -1)
                         {
                             playersId.Add(grid[i][j]);
-                            dtg_Forza4[j, i].Style.BackColor = colors[playersId.Count - 1];
+                            dtg_Forza4[j, i].Style.BackColor = colors[index];
                         }
                         else
                         {
-                            dtg_Forza4[j, i].Style.BackColor = colors[id];
+                            dtg_Forza4[j, i].Style.BackColor = colors[index];
                         }
                     }
                 }
@@ -206,6 +206,7 @@ namespace Forza4Socket
         private void EnableGridInteraction()
         {
             isGridEnabled = true;
+            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.Transparent;
         }
 
         private void EnablePlayAgain()
@@ -261,9 +262,18 @@ namespace Forza4Socket
 
         private void on_DiscoverButtonClick(object sender, EventArgs e)
         {
-            searchingLbl.Text = "Searching...";
-            lstHosts.Items.Clear();
-            client.SearchAvailableHosts();
+            IPAddress netAddress;
+            if (IPAddress.TryParse(client.localNetworkAddress, out netAddress))
+            {
+                searchingLbl.Text = "Searching...";
+                lstHosts.Items.Clear();
+                client.SearchAvailableHosts();
+            }
+            else
+            {
+                searchingLbl.Text = "Invalid network IP";
+            }
+
         }
 
         private void on_GridCellClick(object sender, DataGridViewCellEventArgs e)
@@ -296,7 +306,8 @@ namespace Forza4Socket
                 {
                     PlayAgain = true,
                 };
-                client.SendDataToServer(request);
+                // TODO: IMPLEMENT
+                // client.SendDataToServer(request);
             }
         }
 
