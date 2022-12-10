@@ -132,10 +132,10 @@
             this.grb_RegoleEAvvio.TabStop = false;
             this.grb_RegoleEAvvio.Text = "REGOLE E AVVIO";
             // 
-            // textBox1
+            // localAddressTextBox
             // 
             this.localAddressTextBox.Location = new System.Drawing.Point(207, 443);
-            this.localAddressTextBox.Name = "textBox1";
+            this.localAddressTextBox.Name = "localAddressTextBox";
             this.localAddressTextBox.Size = new System.Drawing.Size(211, 27);
             this.localAddressTextBox.TabIndex = 12;
             this.localAddressTextBox.Text = "192.168.1.0";
@@ -271,6 +271,7 @@
             this.dtg_Forza4.AllowUserToResizeColumns = false;
             this.dtg_Forza4.AllowUserToResizeRows = false;
             this.dtg_Forza4.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtg_Forza4.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dtg_Forza4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtg_Forza4.Location = new System.Drawing.Point(7, 88);
             this.dtg_Forza4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);

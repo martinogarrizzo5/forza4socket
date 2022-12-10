@@ -54,7 +54,7 @@ namespace Forza4Socket
             dtg_Forza4.RowCount = 6;
             dtg_Forza4.ColumnHeadersVisible = false;
             dtg_Forza4.RowHeadersVisible = false;
-            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.White;
+            dtg_Forza4.DefaultCellStyle.SelectionBackColor = Color.Transparent;
             for (int i = 0; i < 6; i++)
             {
                 DataGridViewRow row = dtg_Forza4.Rows[i];
