@@ -114,7 +114,7 @@ namespace Forza4Socket.Game
             // check negatively slopped diagonals
             for (int c = 0; c < Columns - 3; c++)
             {
-                for (int r = 0; r < Rows - 3; r++)
+                for (int r = 3; r < Rows; r++)
                 {
                     if (GameGrid[r][c] == p && GameGrid[r - 1][c + 1] == p && GameGrid[r - 2][c + 2] == p && GameGrid[r - 3][c + 3] == p)
                     {
